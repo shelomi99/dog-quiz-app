@@ -112,6 +112,7 @@ public class IdentifyDogActivity extends AppCompatActivity {
         if(isSwitchChecked){
             Log.d(LOG_TAG, "Hard level is chosen ");
             textView = (TextView)findViewById(R.id.timer);
+            submitButton = (Button) findViewById(R.id.button_next);
             textView.setVisibility(View.VISIBLE);
             countDownTimer = new CountDownTimer(timeLeftInMills,1000) {
                 @Override
@@ -125,6 +126,7 @@ public class IdentifyDogActivity extends AppCompatActivity {
                 @Override
                 public void onFinish() {
                     textView.setText("Game over");
+                    submitButton.setVisibility(View.VISIBLE);
                     textView.setTextSize(35);
                     TextView answerView = (TextView) findViewById(R.id.identify_dog_result);
                     answerView.setVisibility(View.VISIBLE);
@@ -277,12 +279,10 @@ public class IdentifyDogActivity extends AppCompatActivity {
         if (randImageNameOne.equals(clickedImage) || randImageNameTwo.equals(clickedImage) || randImageNameThree.equals(clickedImage)) {
             disableClickButton();
             validateAnswer();
-            submitButton.setVisibility(View.VISIBLE);
         }
         TextView textView = (TextView) findViewById(R.id.breed_name);
         correctResult = " Choose the \""+ breedToGuess + "\" from the above images";
         textView.setText(correctResult);
-
 
     }
 }

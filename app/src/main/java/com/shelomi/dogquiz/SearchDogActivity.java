@@ -29,6 +29,7 @@ public class SearchDogActivity extends AppCompatActivity {
     private static int[] resourceIdArray;
     private static List searchedDogArray;
     private static String keyName,message;
+    private static boolean clickedSubmit = false;
     TextView textView;
     Button stopButton,submitButton;
 
@@ -48,6 +49,7 @@ public class SearchDogActivity extends AppCompatActivity {
 
 }
     public void onSearchDogButtonClicked(View view) {
+        clickedSubmit = true;
         stopButton = (Button) findViewById(R.id.button_stop);
         submitButton = (Button) findViewById(R.id.button);
         Log.d(LOG_TAG, "Submit button clicked!");
@@ -75,6 +77,7 @@ public class SearchDogActivity extends AppCompatActivity {
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clickedSubmit = false;
                 finish();
                 openNewActivity();
             }
@@ -82,8 +85,10 @@ public class SearchDogActivity extends AppCompatActivity {
     }
     public void openNewActivity() {
         Log.d(LOG_TAG, "Stop button clicked!");
+        clickedSubmit = false;
         //creating the intent object
         Intent searchDogIntent = new Intent(this, SearchDogActivity.class);
+        finish();
         //putting extras into the intent
         searchDogIntent.putExtra("map", dogBreedMap);
         startActivity(searchDogIntent);
@@ -117,34 +122,43 @@ public class SearchDogActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putIntArray("resourceIdArray", resourceIdArray);
+        outState.putBoolean("clickedSubmit", clickedSubmit);
     }
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         resourceIdArray = savedInstanceState.getIntArray("resourceIdArray");
+        clickedSubmit = savedInstanceState.getBoolean("clickedSubmit", clickedSubmit);
         stopButton = (Button) findViewById(R.id.button_stop);
         submitButton = (Button) findViewById(R.id.button);
-        for (String keyName : dogBreedMap.keySet()) {
-            // checking if the searched breed type is available in the hash map
-            if (keyName.toLowerCase().equals(message)) {
-                submitButton.setVisibility(View.INVISIBLE);
-                stopButton.setBackgroundColor(getResources().getColor(R.color.red));
-                stopButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                        openNewActivity();
+
+        System.out.println(clickedSubmit);
+
+        if (clickedSubmit) {
+
+            for (String keyName : dogBreedMap.keySet()) {
+                // checking if the searched breed type is available in the hash map
+                if (keyName.toLowerCase().equals(message)) {
+                    submitButton.setVisibility(View.INVISIBLE);
+                    stopButton.setBackgroundColor(getResources().getColor(R.color.red));
+                    stopButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                            openNewActivity();
+                        }
+                    });
+                    searchedDogArray = dogBreedMap.get(keyName);
+                    // to not get the images in a sequential order
+                    Collections.shuffle(searchedDogArray);
+                    resourceIdArray = new int[searchedDogArray.size()];
+                    for (int j = 0; j < searchedDogArray.size(); j++) {
+                        resourceIdArray[j] = getResources().getIdentifier((String) searchedDogArray.get(j), "drawable", getPackageName());
                     }
-                });
-                searchedDogArray = dogBreedMap.get(keyName);
-                // to not get the images in a sequential order
-                Collections.shuffle(searchedDogArray);
-                resourceIdArray = new int[searchedDogArray.size()];
-                for (int j = 0; j < searchedDogArray.size(); j++) {
-                    resourceIdArray[j] = getResources().getIdentifier((String) searchedDogArray.get(j), "drawable", getPackageName());
+                    ShowImageGallery();
                 }
-                ShowImageGallery();
             }
         }
+
     }
 }

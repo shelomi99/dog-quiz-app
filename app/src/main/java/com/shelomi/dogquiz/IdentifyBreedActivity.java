@@ -30,7 +30,8 @@ public class IdentifyBreedActivity extends AppCompatActivity implements AdapterV
     private Button button;
     private Spinner mySpinner;
     private TextView textView,answerView;
-    private Button submitButton;
+    private static String buttonText = "Submit";
+    private static boolean clickedSubmit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +140,6 @@ public class IdentifyBreedActivity extends AppCompatActivity implements AdapterV
                     System.out.println(correctAnswer);
                     if (selectedBreed.equals(correctAnswer)) {
                         textView = (TextView) findViewById(R.id.test_result);
-                        answerView.setVisibility(View.INVISIBLE);
                         textView.setTextColor(Color.rgb(30, 130, 0));
                         correctResult = " Your answer is Correct";
                         textView.setText(correctResult);
@@ -157,8 +157,9 @@ public class IdentifyBreedActivity extends AppCompatActivity implements AdapterV
         }
         //to disable the spinner after a value is selected
         mySpinner.setEnabled(false);
-        submitButton = (Button) findViewById(R.id.button_submit);
+        Button submitButton = (Button) findViewById(R.id.button_submit);
         submitButton.setText("Next");
+        buttonText = "Next";
         if (isSwitchChecked) {
             countDownTimer.cancel();
         }
@@ -166,14 +167,15 @@ public class IdentifyBreedActivity extends AppCompatActivity implements AdapterV
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clickedSubmit = true;
                 finish();
                 openNewActivity();
             }
         });
     }
 
-
     public void openNewActivity() {
+        clickedSubmit = false;
         //creating the intent object
         Intent identifyBreedIntent = new Intent(this, IdentifyBreedActivity.class);
         //putting extras into the intent
@@ -190,6 +192,8 @@ public class IdentifyBreedActivity extends AppCompatActivity implements AdapterV
         outState.putString("correctResult",correctResult);
         outState.putString("wrongAnswer",wrongAnswer);
         outState.putString("wrongResult",wrongResult);
+        outState.putString("submitText", buttonText);
+        outState.putBoolean("clickedSubmit", clickedSubmit);
 
     }
 
@@ -206,55 +210,59 @@ public class IdentifyBreedActivity extends AppCompatActivity implements AdapterV
         correctResult = savedInstanceState.getString("correctResult",correctResult);
         wrongAnswer = savedInstanceState.getString("wrongAnswer",wrongAnswer);
         wrongResult = savedInstanceState.getString("wrongResult",wrongResult);
-        int resource_id = getResources().getIdentifier(dogImageName, "drawable", getPackageName());
-        imgView.setImageResource(resource_id);
+        buttonText = savedInstanceState.getString("submitText", buttonText);
+        clickedSubmit = savedInstanceState.getBoolean("clickedSubmit",clickedSubmit);
+        Button submitButton = (Button) findViewById(R.id.button_submit);
+        System.out.println(buttonText);
+        setTimer();
+        if (buttonText.equals("Submit")){
+            submitButton.setText("Submit");
+        }else if (clickedSubmit){
+            submitButton.setText("Next");
+            mySpinner.setEnabled(false);
+            submitButton.setBackgroundColor(Color.rgb(36, 26, 126));
+            for (List mapValue : dogBreedMap.values()) {
+                // to iterate through the specific array of the shown dog image breed
+                for (int i = 0; i < mapValue.size(); i++) {
+                    // checking if the name of the image is equal to the array element
+                    if (mapValue.get(i).equals(dogImageName)) {
+                        correctAnswer = getKey(dogBreedMap, mapValue);
+                        Log.d(LOG_TAG, "Correct breed is "+ correctAnswer);
+                        // checking if the given answer is equal to the correct breed name
+                        String spinnerHint = "Choose the breed";
+                        if (selectedBreed != null) {
+                            if (!selectedBreed.equals(spinnerHint) && selectedBreed.equals(correctAnswer) ) {
+                                textView = (TextView) findViewById(R.id.test_result);
+                                textView.setTextColor(Color.rgb(30, 130, 0));
+                                correctResult = " Your answer is Correct";
+                                textView.setText(correctResult);
+                            } else {
+                                textView.setTextColor(Color.rgb(215, 15, 0));
+                                wrongAnswer = "Answer is Wrong";
+                                textView.setText(wrongAnswer);
+                                answerView = (TextView) findViewById(R.id.correct_breed_name);
+                                wrongResult = " Correct breed is " + correctAnswer;
+                                answerView.setText(wrongResult);
+                                answerView.setVisibility(View.VISIBLE);
+                                textView.setVisibility(View.VISIBLE);
 
-        for (List mapValue : dogBreedMap.values()) {
-            // to iterate through the specific array of the shown dog image breed
-            for (int i = 0; i < mapValue.size(); i++) {
-                // checking if the name of the image is equal to the array element
-                if (mapValue.get(i).equals(dogImageName)) {
-                    correctAnswer = getKey(dogBreedMap, mapValue);
-                    Log.d(LOG_TAG, "Correct breed is "+ correctAnswer);
-                    // checking if the given answer is equal to the correct breed name
-                    String spinnerHint = "Choose the breed";
-                    if (selectedBreed != null) {
-                        if (!selectedBreed.equals(spinnerHint) && selectedBreed.equals(correctAnswer) ) {
-                            textView = (TextView) findViewById(R.id.test_result);
-                            textView.setTextColor(Color.rgb(30, 130, 0));
-                            correctResult = " Your answer is Correct";
-                            textView.setText(correctResult);
-                        } else {
-                            textView.setTextColor(Color.rgb(215, 15, 0));
-                            wrongAnswer = "Answer is Wrong";
-                            textView.setText(wrongAnswer);
-                            answerView = (TextView) findViewById(R.id.correct_breed_name);
-                            wrongResult = " Correct breed is " + correctAnswer;
-                            answerView.setText(wrongResult);
-                            answerView.setVisibility(View.VISIBLE);
-                            textView.setVisibility(View.VISIBLE);
-
+                            }
                         }
                     }
-                    //to disable the spinner after a value is selected
-                    submitButton = (Button) findViewById(R.id.button_submit);
-                    submitButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mySpinner.setEnabled(false);
-                            submitButton.setBackgroundColor(Color.rgb(36, 26, 126));
-                            submitButton.setText("Next");
-                            if (isSwitchChecked) {
-                                countDownTimer.cancel();
-                            }
-                            finish();
-                            openNewActivity();
-                        }
-                    });
                 }
-            }
-        }
+                submitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                        openNewActivity();
 
+                    }
+                });
+            }
+            clickedSubmit = false;
+        }
+        int resource_id = getResources().getIdentifier(dogImageName, "drawable", getPackageName());
+        imgView.setImageResource(resource_id);
 
 
     }
