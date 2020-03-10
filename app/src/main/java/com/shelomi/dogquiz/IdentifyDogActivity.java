@@ -31,7 +31,6 @@ public class IdentifyDogActivity extends AppCompatActivity {
     private CountDownTimer countDownTimer;
     private long timeLeftInMills = START_TIME_IN_MILLS;
     private boolean timerRunning;
-    private static ArrayList randomDogBreed;
     ImageView imgView1,imgView2,imgView3;
     TextView textView,answerView;
     Button submitButton;
@@ -93,11 +92,12 @@ public class IdentifyDogActivity extends AppCompatActivity {
 
         // getting the name of the bree that should be guessed
         int rnd = rand.nextInt(3);
-        randomDogBreed = (ArrayList) dogBreedMap.get(key[randomArray[rnd]]);
+        ArrayList randomDogBreed = (ArrayList) dogBreedMap.get(key[randomArray[rnd]]);
         breedToGuess = getKey(dogBreedMap, randomDogBreed);
         TextView textView = (TextView) findViewById(R.id.breed_name);
         correctResult = " Choose the \""+ breedToGuess + "\" from the above images";
         textView.setText(correctResult);
+        // checking the breed of the dog that needs to be guessed
         if (rnd == 0){
             dogToGuess = randImageNameOne;
         }else if (rnd == 1){

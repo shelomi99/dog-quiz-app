@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         final Switch levelSwitch = (Switch)findViewById(R.id.switch1) ;
         levelSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             TextView levelText = (TextView) findViewById(R.id.game_level);
+            // displaying the level chosen
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     isSwitchChecked = true;
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     public void launchIdentifyDogActivity(View view) {
         Log.d(LOG_TAG, "Identify Dog Button clicked!");
         Intent identifyDogIntent = new Intent(this, IdentifyDogActivity.class);
+        //putting extras into the intent
         identifyDogIntent.putExtra("map",dogsMap);
         startActivity(identifyDogIntent);
     }
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
     public void launchSearchDogActivity(View view) {
         Log.d(LOG_TAG, "Search Dog Button clicked!");
         Intent searchDogIntent = new Intent(this, SearchDogActivity.class);
+        //putting extras into the intent
         searchDogIntent.putExtra("map",dogsMap);
         startActivity(searchDogIntent);
     }

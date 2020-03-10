@@ -43,8 +43,9 @@ public class IdentifyBreedActivity extends AppCompatActivity implements AdapterV
         dogBreedMap = (HashMap<String, List<String>>) intent.getSerializableExtra("map");
 
 
-        Random rand = new Random();
-        int randDogImage = rand.nextInt(101) + 1;
+        Random randomNumber = new Random();
+        // to get a random image based on the image file name
+        int randDogImage = randomNumber.nextInt(101) + 1;
         dogImageName = "img" + randDogImage;
         // randomly setting an image to an ImageView
         ImageView imgView = findViewById(R.id.dog_breed);
@@ -67,7 +68,10 @@ public class IdentifyBreedActivity extends AppCompatActivity implements AdapterV
             spinner.setAdapter(adapter);
         }
     }
+    // setting the timer
     public void setTimer(){
+        // checking if the switch is enabled
+        // referencing --> URL - https://www.youtube.com/watch?v=MDuGwI6P-X8&t=654s
         if(isSwitchChecked){
             Log.d(LOG_TAG, "Hard level is chosen ");
             textView = (TextView)findViewById(R.id.timer);
@@ -91,6 +95,7 @@ public class IdentifyBreedActivity extends AppCompatActivity implements AdapterV
             }.start();
             timerRunning = true;
         }
+        // end of referencing code
         else {
             Log.d(LOG_TAG, "Easy level is chosen ");
         }
@@ -106,7 +111,6 @@ public class IdentifyBreedActivity extends AppCompatActivity implements AdapterV
     public void onNothingSelected(AdapterView<?> parent) {
         Log.d(LOG_TAG, "No item is selected");
     }
-
     // method to get the key of the corresponding dog image value
     public static  <K, V> K getKey(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
@@ -161,6 +165,7 @@ public class IdentifyBreedActivity extends AppCompatActivity implements AdapterV
         submitButton.setText("Next");
         buttonText = "Next";
         if (isSwitchChecked) {
+            // to pause the timer
             countDownTimer.cancel();
         }
         submitButton.setBackgroundColor(Color.rgb(36, 26, 126));
@@ -182,7 +187,7 @@ public class IdentifyBreedActivity extends AppCompatActivity implements AdapterV
         identifyBreedIntent.putExtra("map", dogBreedMap);
         startActivity(identifyBreedIntent);
     }
-
+// to save restore variables when screen is rotated
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
