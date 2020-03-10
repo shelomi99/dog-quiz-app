@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Dog Quiz</string>
+    <string name="dog_quiz_title1">Dogs</string>
+    <string name="dog_quiz_subtitle">Welcome! Tap on a button to start game</string>
+    <string name="button_label_identify_breed">Identify the breed</string>
+    <string name="button_label_identify_dog">Identify the dog</string>
+    <string name="button_label_search_dog_breed">Search dog breed</string>
+    <string name="switch_level">Chosen Level</string>
+    <string name="identify_breed_title">Identify The Breed</string>
+    <string name="dog_breeds">Picture of the dog</string>
+    <string name="submit">Submit</string>
+    <string name="next">Next</string>
+    <string name="stop">Stop</string>
+    <string name="view_result">Select a dog breed</string>
+    <string name="dog_breed">Correct breed of the dog</string>
+    <string name="identify_dog_title">Identify The Dog</string>
+    <string name="search_dog_breed_title">Search A Dog Breed</string>
+    <string name="easy_level">Easy</string>
+    <string name="dog_quiz_title2">QUIZ</string>
+    <string name="dog_breed_name">Choose this dog breed</string>
+    <string name="search_dog_breed">Dog breed</string>
+    <string name="wrong_breed">Breed not available, Try again</string>
+    <string name="timer">Timer</string>
+    <string-array name="dog_name_array">
+        <item>Choose the breed</item>
+        <item>Beagle</item>
+        <item>Blenheim spaniel</item>
+        <item>Dandie dinmont</item>
+        <item>German shepherd</item>
+        <item>Golden retriever</item>
+        <item>Norfolk terrier</item>
+        <item>Pug</item>
+        <item>Samoyed</item>
+        <item>Siberian husky</item>
+        <item>Toy poodle</item>
+        <item>Yorkshire terrier</item>
+    </string-array>
+</resources>
